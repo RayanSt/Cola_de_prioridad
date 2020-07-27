@@ -8,7 +8,7 @@ class monticulo{int *Arr,tam,PosAct,tamaniototal;
 	public: monticulo(int);
 			~monticulo();
 			bool insertar(int);
-			void atender(int);
+			int atender();
 			void imprimirArreglo();
 			bool monticulo_lleno();
 			int get_tam(){return tam;
@@ -16,9 +16,9 @@ class monticulo{int *Arr,tam,PosAct,tamaniototal;
 };
 
 monticulo::monticulo(int tamanio){
-	cout<<"veo que pasa?";
 	tam = 0;
-	Arr[tamanio+1];
+	PosAct = 1;
+	Arr = new int[tamanio+1];
 	tamaniototal = tamanio;
 }
 
@@ -27,65 +27,68 @@ monticulo::~monticulo(){
 }
 
 bool monticulo::insertar(int priodidad){
-	int aux;
-	if(tam==0){
-		cout<<"veo1";
-		Arr[1]=priodidad;
-		return true;
+int aux;
+	if (monticulo_lleno()){ 
+		cout<<"Tamanio insuficiente";
+		return false;
 	}else{
-		if (monticulo_lleno()){ 
-			cout<<"Tamanio insuficiente";
-			return false;
-		}else{
-			cout<<"veo2";
-			Arr[tam+1] = priodidad;
-			tam = tam + 1;
-			int i = tam;
-			//revisa si el hijo es mayor que el padre y los intercambia
-			while(i != 1 &&  Arr[i] < Arr[((int)i/2)]){
-				aux = Arr[i];
-				Arr[i] = Arr[(int)i/2];
-				Arr[(int)i/2] = aux;
-				i = (int)i/2;
-		}
-		return true;
+		Arr[PosAct] = priodidad;
+		tam = tam + 1;
+		int i = PosAct, divisor = 2;
+		PosAct++;
+		//revisa si el hijo es mayor que el padre y los intercambia
+		while((i != 1) &&  (Arr[i] > Arr[(i/divisor)])){
+			aux = Arr[i];
+			Arr[i] = Arr[i/divisor];
+			Arr[i/divisor] = aux;
+			i = i/divisor;
 	}
+	return true;
 }
 }
 
-void monticulo::atender(int raiz){
+int monticulo::atender(){
+	int aux, raiz = 0;
 	if (tam == 0) { 
 		cout<<"No hay elementos";
 	}else{
-		Arr[1] = Arr[tam+1];
+		//Arr[1] = Arr[PosAct];
+		raiz = Arr[1];
 		tam = tam - 1;
+		PosAct--;
 		bool fin = false; 
 		int i = 1;
-		while ((2*i == tam+1) && !fin ){  
+		while ((2*i >= PosAct) && !fin ){  
 		//la posición i no es una hoja 
-		//mínimo de los hijos 
-			if ((2*i+1 == tam+1) && Arr[2*i+1] < Arr[2*i] ){ 
+		//maximo de los hijos 
+			if ((2*i+1 >= PosAct) && Arr[2*i+1] > Arr[2*i] ){ 
 				PosAct = 2*i+1;
 			}else{
 				PosAct = 2*i;
 			}
 			//si es necesario, se intercambia
-			if (Arr[PosAct] < Arr[i]) { 
+			if (Arr[PosAct] > Arr[i]) { 
+				aux = Arr[i];
 				Arr[i]  =  Arr[PosAct];
-				Arr[PosAct]  =  Arr[i]; 
+				Arr[PosAct]  =  aux; 
 				i = PosAct;
 			}else{
 				fin = true;
 			}
+		
 		}
-}	
+		//Arr[1]=0;
+}
+return raiz;	
 }
 
 
 void monticulo::imprimirArreglo(){
-	cout<<"veo)))";
-	for (int i=1;i<=tam+1;i++){
-		cout<<"Posicion "<<i<<": "<<Arr[i];
+	for (int i=1;i<PosAct;i++){
+		if(Arr[i]==0)
+			cout<<"Posicion "<<i<<": POSISCION VACIA ";
+		else
+			cout<<"Posicion "<<i<<": "<<Arr[i]<<"; ";
 	}
 }
 

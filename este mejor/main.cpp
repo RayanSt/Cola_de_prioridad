@@ -7,15 +7,14 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	monticulo c(5);
-	//cout<<c.get_tam()<<endl;
 	c.insertar(1);
-	cout<<c.get_tam()<<endl;
 	c.insertar(3);
-	cout<<c.get_tam()<<endl;
 	c.insertar(12);
-	cout<<c.get_tam()<<endl;
 	c.insertar(72);
 	c.insertar(24);
+	c.imprimirArreglo();
+	c.atender(1);
+	cout<<endl;
 	c.imprimirArreglo();
 	return 0;
 }
